@@ -21,7 +21,7 @@ router.post('/', auth, async (req, res) => {
   // Ensure req.user._id is available from the auth middleware
   const review = await Review.create({
     bookId,
-    userId: req.user._id,
+    userId: req.user.id,
     rating,
     comment
   });

@@ -1,20 +1,54 @@
 import { useAuth } from '../contexts/AuthContext';
 import React from 'react';
+
 export default function Profile() {
   const { user } = useAuth();
 
-  return (
-    <div className="p-6 max-w-lg mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Profile</h1>
-      {user ? (
-        <div className="space-y-2">
-          <p><strong>Username:</strong> {user.username}</p>
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Role:</strong> {user.role}</p>
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full text-center">
+          <p className="text-gray-600">Please log in to view your profile.</p>
         </div>
-      ) : (
-        <p>You are not logged in.</p>
-      )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-md mx-auto p-6">
+      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        {/* Simple Profile Header */}
+        <div className="bg-blue-500 p-5 text-white">
+          <div className="flex items-center">
+            <div className="bg-white rounded-full h-12 w-12 flex items-center justify-center text-blue-500 text-xl font-bold mr-4">
+              {user.username.charAt(0).toUpperCase()}
+            </div>
+            <h1 className="text-xl font-semibold">{user.username}</h1>
+          </div>
+        </div>
+        
+        {/* Simple Profile Content */}
+        <div className="p-5">
+          <h2 className="text-lg font-medium mb-4">Account Information</h2>
+          
+          <div className="space-y-3">
+            <div>
+              <p className="text-sm text-gray-500">Username</p>
+              <p className="font-medium">{user.username}</p>
+            </div>
+            
+            <div>
+              <p className="text-sm text-gray-500">Email</p>
+              <p className="font-medium">{user.email}</p>
+            </div>
+            
+            <div>
+              <p className="text-sm text-gray-500">Account Type</p>
+              <p className="font-medium">User</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

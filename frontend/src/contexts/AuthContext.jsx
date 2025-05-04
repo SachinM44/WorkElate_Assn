@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import axios from '../api/axios';
 import React from 'react';
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -24,23 +26,43 @@ export const AuthProvider = ({ children }) => {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUser(res.data);
+      console.log('User data fetched:', res.data);
     } catch (err) {
-      console.error('Failed to fetch user');
+      console.error('Failed to fetch user:', err);
+      toast.error('Failed to fetch user data');
     }
   };
 
   const login = async (email, password) => {
-    const res = await axios.post('/users/login', { email, password });
-    setToken(res.data.token);
+    try {
+      const res = await axios.post('/users/login', { email, password });
+      setToken(res.data.token);
+      toast.success('Successfully logged in!');
+      console.log('Login successful');
+    } catch (err) {
+      console.error('Login failed:', err);
+      toast.error(err.response?.data?.message || 'Login failed');
+      throw err;
+    }
   };
 
   const register = async (username, email, password) => {
-    const res = await axios.post('/users/register', { username, email, password });
-    setToken(res.data.token);
+    try {
+      const res = await axios.post('/users/register', { username, email, password });
+      setToken(res.data.token);
+      toast.success('Registration successful!');
+      console.log('Registration successful');
+    } catch (err) {
+      console.error('Registration failed:', err);
+      toast.error(err.response?.data?.message || 'Registration failed');
+      throw err;
+    }
   };
 
   const logout = () => {
     setToken('');
+    toast.info('Logged out successfully');
+    console.log('User logged out');
   };
 
   return (
